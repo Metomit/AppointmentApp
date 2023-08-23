@@ -33,5 +33,9 @@
                 exit();
             }
         }
+
+        public function close() {
+            $this->conn->close();
+        }
     }
 ?>

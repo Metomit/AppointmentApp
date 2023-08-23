@@ -4,183 +4,150 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <title>Appointment Application</title>
+        <title>Appointment App</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
                 background-color: #f4f4f4;
-                margin: 0;
-                padding: 0;
             }
-            form {
-                background-color: #fff;
-                border-radius: 5px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                width: 400px;
-                margin: 20px auto;
+
+            a {
+                text-decoration: none;
+                color: inherit;
             }
-            .box {
-                margin-bottom: 10px;
-            }
-            label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-            input[type="text"],
-            select,
-            textarea {
+
+            table {
                 width: 100%;
-                padding: 8px;
+                border-collapse: collapse;
                 border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
+                margin: 20px 0;
             }
-            select {
-                cursor: pointer;
+
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+                font-weight: bold;
+                padding: 10px;
+                border: 1px solid #ccc;
+                text-align: left;
             }
-            textarea {
-                resize: vertical;
-                min-height: 100px;
+
+            td {
+                padding: 10px;
+                border: 1px solid #ccc;
             }
-            #submit {
+
+            tr:nth-child(even) {
+                background-color: #f7f7f7;
+            }
+            #create {
                 display: block;
                 background-color: #007bff;
                 color: #fff;
                 border: none;
-                padding: 10px 15px;
+                padding: 0;
                 border-radius: 4px;
                 cursor: pointer;
-                width: 100%;
+                width: 235px;
             }
-            #submit:hover {
+            #create:hover {
                 background-color: #0056b3;
             }
-            #contactInfo {
-                border: 1px solid #ccc;
-                margin-bottom: 15px;
-                border-radius: 4px;
-                padding: 5px 5px 5px 5px;
-                height: 220px;
+            #create>a{
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s ease-in-out;
+                font-weight: bold;
             }
-            #contactInfo>div{
-                transform: scale(0.7);
-                -webkit-transform-origin-x: 0;
-                -webkit-transform-origin-y: 0;
-            }
-            #contactInfo>h3{
-                margin: 0;
-                margin-bottom: 10px;
-            }
-            .error{
-                color: #FF0000;
+            .edit:hover,
+            .delete:hover{
+                cursor: pointer;
+                color: red;
             }
         </style>
     </head>
     <body>
-        <?php 
+        <?php
             include("database.php");
             $database_obj = new Database();
-            include("submission.php");
-            //include("database.php");
-            //$obj = new Database();
-            //$status = $obj->executeQuery("SELECT * FROM Appointments")->fetch_assoc()["appointment_id"] . "<br>";
-            //echo $status;
         ?>
-        <form method="post" action="index.php">   
-            <div class="box">
-                <label>Start Time:</label><input type="text" name="startTime" id="startTime" /><span class="error">* <?php echo $startTimeErr;?></span>
-            </div>
-            <div class="box">
-                <label>End Time:</label><input type="text" name="endTime" id="endTime" /><span class="error">* <?php echo $endTimeErr;?></span>
-            </div>
-            <div class="box">
-                <label>Date:</label><input type="text" name="date" id="date" /><span class="error">* <?php echo $dateErr;?></span>
-            </div>
-            <span class="error"><?php echo $overlapErr;?></span>
-            <div class="box">
-                <label>Service:</label>
-                <select name="service" id="service">
-                    <?php
-                        //include("database.php");
-                        //$database_obj = new Database();
-                        $services_result = $database_obj->executeQuery("SELECT * FROM Services");
-                        $services = array();
-                        while($row = $services_result->fetch_assoc()) {
-                            $services[$row['service_id']] = $row['service_name'];
-                        }
-                        $service_options = "";
-                        foreach($services as $key => $value) {
-                            $service_options .= '<option value="'.$key.'">'.$value.'</option>';
-                        }
-                        echo $service_options;
-                    ?>
-                </select>
-            </div>
-            <div class="box">
-                <label>Status:</label><input type="text" name="status" id="status" />
-            </div>
-            <div class="box">
-                <label>Special requirements/Pre-existing medical condition:</label><textarea type="text" name="specialReq" id="specialReq"></textarea>
-            </div>
-            <div id="contactInfo">
-                <h3>Contact info:</h3>
-                <div>
-                    <div class="box">
-                        <label>First name:</label><input type="text" name="contactName" id="contactName" />
-                    </div>
-                    <div class="box">
-                        <label>Last name:</label><input type="text" name="contactSurname" id="contactSurname" />
-                    </div>
-                    <div class="box">
-                        <label>Email:</label><input type="text" name="email" id="email" /><span class="error">* <?php echo $emailErr;?></span>
-                    </div>
-                    <div class="box">
-                        <label>Phone number:</label><input type="text" name="phoneNumber" id="phoneNumber" />
-                    </div>
-                </div>
-            </div>
-            <input id="submit" type="submit" class="btn-submit" value="Submit" />
-        </form>
-        <!--script>
+        <div id="create"><a href="/form.php">Schedule an appointment</a></div>
+        <?php
+            $query = "SELECT * FROM (SELECT * FROM appointments a join contactinfo c on a.appointment_contact_info_id=c.contact_id)
+                        j join services s on s.service_id=j.appointment_service_id ORDER BY a.appointment_date, a.appointment_start_time;";
+            $result = $database_obj->executeQuery($query);
+            
+            if ($result->num_rows > 0) {
+                echo "<table border='1'>
+                        <tr>
+                        <th>Action</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Service</th>
+                        <th>Special requirements/Pre-existing medical condition</th>
+                        <th>Patient first name</th>
+                        <th>Patient last name</th>
+                        <th>Patient emaiil</th>
+                        <th>Patient phone number</th>
+                        </tr>";
+                
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td><input type=\"hidden\" name=\"appointment_id\" value=\"{$row['appointment_id']}\">
+                            <a class=\"edit\" href=\"form.php?appointment_id={$row['appointment_id']}\">Reschedule</a> <span class=\"delete\">Cancel</span></td>
+                            <td>{$row['appointment_start_time']}</td>
+                            <td>{$row['appointment_end_time']}</td>
+                            <td>{$row['appointment_date']}</td>
+                            <td>{$row['appointment_status']}</td>
+                            <td>{$row['service_name']}</td>
+                            <td>{$row['appointment_special_requirements']}</td>
+                            <td>{$row['contact_name']}</td>
+                            <td>{$row['contact_surname']}</td>
+                            <td>{$row['contact_email']}</td>
+                            <td>{$row['contact_phonenumber']}</td>
+                            </tr>";
+                }
+            
+                echo "</table>";
+            }
+            else{
+                echo "No appointments scheduled yet";
+            }
+        ?>
+        <script>
             $(document).ready(function() {
 
-                $("#submit").click(function() {
+                $(".delete").click(function() {
 
-                    var startTime = $("#startTime").val();
-                    var endTime = $("#endTime").val();
-                    var date = $("#date").val();
-                    var status = $("#status").val();
-                    var service = $("#service").val();
-                    var specialReq = $("#specialReq").val();
-                    var contactName = $("#contactName").val();
-                    var contactSurname = $("#contactSurname").val();
-                    var email = $("#email").val();
-                    var phoneNumber = $("#phoneNumber").val();
+                    var appointment_id = $($(this).parent().find("input")[0]).val();
+                    //console.log(appointment_id);
 
                     $.ajax({
-                        type: "POST",
-                        url: "localhost:8080/index.php",
-                        dataType: 'json',
+                        type: "GET",
+                        url: "delete.php",
                         data: {
-                            startTime: startTime,
-                            endTime: endTime,
-                            date: date,
-                            status: status,
-                            service: service,
-                            specialReq: specialReq,
-                            contactName: contactName,
-                            contactSurname: contactSurname,
-                            email: email,
-                            phoneNumber: phoneNumber,
+                            appointment_id: appointment_id
                         },
-                        cache: false
+                        cache: false,
+                        success: function(response) {
+                            console.log("Returned: " + response);
+                            location.reload(true);
+                            alert(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
                     });
 
                 });
 
             });
-        </script-->
+        </script>
     </body>
 </html>
