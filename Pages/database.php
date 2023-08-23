@@ -24,11 +24,11 @@
         public function executeQuery($qstring){
             try{
                 $result = $this->conn->query($qstring);
-                $this->conn -> close();
                 return $result;
             }
-            catch(mysqli_sql_exception){
+            catch(mysqli_sql_exception $e){
                 echo "Database connection error!";
+                echo $e->getMessage();
                 $this->conn -> close();
                 exit();
             }
