@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `appointments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `appointments` (
-  `appointment_id` int NOT NULL,
+  `appointment_id` int NOT NULL AUTO_INCREMENT,
   `appointment_start_time` time NOT NULL,
   `appointment_end_time` time NOT NULL,
   `appointment_date` date NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE `appointments` (
   KEY `appointment_contact_info_id` (`appointment_contact_info_id`),
   CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`appointment_service_id`) REFERENCES `services` (`service_id`),
   CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`appointment_contact_info_id`) REFERENCES `contactinfo` (`contact_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `appointments` (
 
 LOCK TABLES `appointments` WRITE;
 /*!40000 ALTER TABLE `appointments` DISABLE KEYS */;
-INSERT INTO `appointments` VALUES (1,'09:00:00','09:30:00','2023-08-24','WAITING_FOR_APPOINTMENT',1,'None',1);
+INSERT INTO `appointments` VALUES (1,'09:00:00','09:30:00','2023-08-24','WAITING_FOR_APPOINTMENT',1,'None',1),(26,'10:30:00','11:00:00','2023-08-29','WAITING FOR APPOINTMENT',2,'Smoking complications',30),(27,'10:30:00','11:00:00','2023-08-30','WAITING FOR APPOINTMENT',3,'None',31),(28,'12:30:00','13:00:00','2023-08-21','PAST DUE',3,'',32);
 /*!40000 ALTER TABLE `appointments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,13 +57,13 @@ DROP TABLE IF EXISTS `contactinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contactinfo` (
-  `contact_id` int NOT NULL,
-  `contact_name` varchar(50) NOT NULL,
+  `contact_id` int NOT NULL AUTO_INCREMENT,
+  `contact_name` varchar(50) DEFAULT NULL,
   `contact_surname` varchar(50) DEFAULT NULL,
   `contact_email` varchar(100) NOT NULL,
   `contact_phonenumber` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`contact_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +72,7 @@ CREATE TABLE `contactinfo` (
 
 LOCK TABLES `contactinfo` WRITE;
 /*!40000 ALTER TABLE `contactinfo` DISABLE KEYS */;
-INSERT INTO `contactinfo` VALUES (1,'Joe','Average','averagejoe@gmail.com','070111222');
+INSERT INTO `contactinfo` VALUES (1,'Joe','Average','averagejoe@gmail.com','070111222'),(30,'Johnny','Goode','johnnygoode@gmail.com','+38970101010'),(31,'Goran','Goranovski','gorangoran@gmail.com','+38971220022'),(32,'Frodo','Baggins','ring@shire.com','073222333');
 /*!40000 ALTER TABLE `contactinfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-22 15:21:58
+-- Dump completed on 2023-08-23 15:11:32
