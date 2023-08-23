@@ -20,7 +20,7 @@ The app requires no technologies other than PHP and MySQL installed. It runs usi
 
 The php.ini is used simply to load the mysqli module to work wiith MySQL in PHP.
 
-run.bat is simply a quick way too boot the server properly ("php -S localhost:8080 -t Pages -c php.ini" is the command if inteded to start server manually).
+run.bat is a quick way too boot the server properly ("php -S localhost:8080 -t Pages -c php.ini" is the command if inteded to start server manually).
 
 The index.php displays all the current appointments in the database. By clicking 'Schedule an appointment', we can schedule a new appointment through form.php and therefore add a new entry to the database. The same can be done by click Reschedule in the Action column to modify a given record. Deleting an appointment is done through the 'Cancel' button in the Actoin column and is done via the delete.php page.
 
